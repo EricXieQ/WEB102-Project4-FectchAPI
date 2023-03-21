@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react'
 import './App.css'
+import axios from 'axios'
+import Random_Dog from '../Components/Random_Dog'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [dog, setDog] = useState(null)
+  const [breed, allBreed] = useState(null)
+  const URL = "https://dog.ceo/api/breeds/image/random"
+  // const URL1 = "https://dog.ceo/api/breed/ fill.IN /images/random"
+  // const URL_allBreeds = "https://dog.ceo/api/breeds/list/all"
+
+  const fetchData = async () => {
+    
+    let response = await axios.get(URL)
+    setDog(response.data)
+    // let response_allBreed = await axios.get(URL_allBreeds)
+    // allBreed(response_allBreed)
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [])
+
+
+  const handleRefresh = () => {
+      window.location.reload();
+  };
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+    <div>
+      <h1 className="header">Dog of the Day!</h1>
+      {dog && <Random_Dog dog_obj = {dog} /> }
+      <button onClick={handleRefresh}>
+        Get New Doggie!!!
+      </button>
     </div>
   )
+   
 }
 
 export default App
